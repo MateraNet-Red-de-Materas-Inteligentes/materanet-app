@@ -74,6 +74,10 @@
 >   almacenamiento seguro y ubicación.
 > - Suite de tests del dominio en `commonMain`, ejecutable **sin emulador ni dispositivo**
 >   — es el criterio de confirmación que fija `adr/0001`.
+>
+> **Destino: `andamiaje-kmp`.** Ese change existe y cubre ambos elementos, más el contrato
+> con la plataforma (ADR-0006) y su entorno de verificación (ADR-0007, ADR-0008). Esta
+> sección queda cerrada por él.
 
 ## 4. Declaraciones que DD-08 exige
 
