@@ -1,7 +1,7 @@
 # BITÁCORA — IntPlantNetworkFrontend
 
 > Registro cronológico de decisiones, con su fundamento, para que el proceso pueda
-> reproducirse sin contexto previo. Última actualización: 2026-09-28.
+> reproducirse sin contexto previo. Última actualización: 2026-09-29.
 
 ---
 
@@ -13,13 +13,13 @@
 | **Artefacto** | Frontend **móvil** (este repositorio) |
 | Ruta | `~/Projects/IntPlantNetworkFrontend` |
 | Bitácora | `BITÁCORA.md` en la raíz del repositorio |
-| Esquema OpenSpec | `spec-driven` |
+| Esquema OpenSpec | `intent-driven` (migrado en E-030; antes `spec-driven`) |
 | OpenSpec CLI | v1.13.1 |
 | Idioma de trabajo | Español (esta bitácora y la conversación) |
-| Estado | **Niveles 1, 2 y 3 cerrados. Nivel 4 (SRS) emitido: change `slice-1-listado-regional` completo y validado, pendiente de implementación** |
-| Artefactos emitidos | `BRS.md` v0.2 (E-017, E-021) · `StRS.md` v0.1 (E-020) — aprobados. `SyRS.md` v0.4 (E-022…E-026) — aprobado. `openspec/changes/slice-1-listado-regional/` (E-027) — 4/4 artefactos, `validate --strict` OK |
+| Estado | **Niveles 1, 2 y 3 cerrados. Nivel 4 (SRS) re-emitido como change `implementar-sistema-desde-sysr`: 5/5 artefactos, `validate --strict` OK, pendiente de implementación.** Bloqueante: `SA-04` sin confirmar (E-034) |
+| Artefactos emitidos | `BRS.md` v0.2 (E-017, E-021) · `StRS.md` v0.1 (E-020) — aprobados. `SyRS.md` v0.4 (E-022…E-026) — aprobado. `openspec/changes/implementar-sistema-desde-sysr/` (E-029…E-036) — 5/5 artefactos, 33/33 SYR en 7 capacidades disjuntas. `adr/0001`…`adr/0005` (E-031…E-034) |
+| ~~Artefacto emitido~~ | ~~`slice-1-listado-regional` (E-027, E-028)~~ — **SUPERADO y eliminado (E-035)** |
 | Directriz vigente | **Documentos lean; conjunto base de requisitos; crecimiento por iteración** (E-018.m) |
-| Artefacto emitido | — |
 
 ---
 
@@ -1202,6 +1202,283 @@ una razón para **adaptarse**, no para **exigir**.
 se obtiene completo, independientemente de cómo llegue"*, con tres escenarios —entero, por
 partes, por páginas— en lugar de uno.
 
+### E-029 — Décima corrección: E-027 afirmó que el total de SYR no bajaba a 32; `SyRS.md` dice lo contrario
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Origen de la corrección:** al construir `implementar-sistema-desde-sysr` y contrastarlo
+contra este registro, apareció una contradicción interna entre E-027 y la fuente.
+
+**Error cometido (décima corrección de nivel).** E-027 escribió:
+
+> *«D-03 (región desde la cuenta) desactiva SYR-24, y por eso el conteo de SYR no baja a 32.»*
+
+`SyRS.md` §6.1 afirma lo contrario, de forma explícita:
+
+> *«**Nota sobre SYR-24:** se cuenta en el grupo 8 aunque esté condicionado a DD-06 […]
+> Si DD-06 se resuelve sin ubicación, SYR-24 se retira y el total baja a 32.»*
+
+**Por qué importa.** La frase de E-027 era una **defensa de una decisión de diseño** —no
+de un dato— y no tenía respaldo en la fuente. El riesgo no es aritmético: es que la
+bitácora afirma un hecho del documento normativo que el documento normativo desmiente. La
+regla de §1 dice *«no afirmar el comportamiento de algo que no se ha observado»*, y aquí se
+afirmó lo contrario de lo observado.
+
+**Resolución.** Prevalece `SyRS.md` §6.1. Con DD-06 resuelto **por pertenencia**, el total
+**sí** baja a 32. La afirmación de E-027 queda anulada.
+
+**Nota:** hoy la discrepancia es **inocua** porque DD-06 se resolvió por ubicación (§E-033),
+de modo que SYR-24 permanece activa y el total **es** 33. Se registra igual, porque si DD-06
+vuelve a cambiar, alguien leerá E-027 y creerá que el total no baja.
+
+---
+
+### E-030 — Migración de esquema: `spec-driven` → `intent-driven`
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Qué pasó.** El repositorio local estaba **por detrás** del remoto: le faltaban
+`BITÁCORA.md` (1324 líneas) y `openspec/changes/slice-1-listado-regional/`. Al
+reconciliar, quedó establecido que **el remoto iba dos pasos adelante** — contenía el
+change que emitió E-027 y E-028, posteriores a la última actualización local de `SyRS.md`.
+
+**Decisión.** Se adopta el esquema **`intent-driven`** de la plantilla
+`intent-driven-dev/intent-driven-template`, sustituyendo a `spec-driven`.
+
+| | `spec-driven` | `intent-driven` |
+|---|---|---|
+| Artefactos | 4 (proposal, specs, design, tasks) | **5** (proposal, specs, design, **adr**, tasks) |
+| Registro de decisiones | ninguno obligatorio | **`<repo>/adr/` a nivel de repositorio** |
+| Trazabilidad de decisiones | en `design.md` | **ADRs versionados e inmutables** |
+
+**Por qué.** E-027 y E-028 tomaran decisiones de arquitectura de primer nivel —stack,
+mecanismo de identidad, resolución de región— y las dejaron **dentro** de un `design.md`
+de change. `intent-driven` exige que esas decisiones vivan en ADRs de nivel de repositorio,
+que sobreviven al archivado del change. Esa separación es exactamente la que hoy falta:
+la única bitácora de por qué existe es esta tabla.
+
+**Artefactos instalados:** `.agents/` (10 skills), `.opencode/agent/` (4 agentes),
+`openspec/schemas/intent-driven/`, `opencode.json`, `AGENTS.md`, `README.md`.
+
+**Efecto colateral corregido:** el `.gitignore` del remoto ignoraba `.opencode/`, pero
+`.opencode/` **ya estaba versionado** (12 archivos). La regla era contradictoria y
+excluía del commit los archivos nuevos `.opencode/agent/` y `adversarial-authoring/`.
+
+---
+
+### E-031 — DD-02 revertida: Kotlin Multiplatform
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Decisión.** El stack del frontend es **Kotlin Multiplatform**, con dominio y
+configuración en `commonMain` y la frontera `expect`/`actual` limitada a **dos** puntos:
+almacenamiento seguro y ubicación.
+
+**Revierte** D-01 de E-027 (*«Expo / React Native»*).
+
+**Por qué se revierte.** La justificación de D-01 era condicional y así lo declaraba: *«si
+el alcance de alertas se cae, la decisión es revisable»*. Se cayó. E-003 contemplaba
+alertas e historial, pero **SYR-27…SYR-33 y R-004 mantienen el control de actuadores fuera
+de alcance**, y ninguna rebanada vigente necesita segundo plano. La condición que
+sostenía D-01 dejó de cumplirse.
+
+**Alternativas consideradas y descartadas:**
+
+| Opción | Por qué no |
+|---|---|
+| Expo / React Native | Es lo que E-027 eligió. Sigue siendo válida; se descarta por decisión del propietario |
+| PWA | Habría sido la ruta más rápida a la primera rebanada y la de menor coste de despliegue. Habría servido igual: no hay requisito de segundo plano |
+| Mantener DD-02 abierta | SYR-32 exige ajustar tres decisiones de forma independiente, y eso es difícil de garantizar sin saber dónde vive la configuración |
+
+**Consecuencia asumida, escrita y no ocultada.** KMP es **la más pesada de las tres** en
+configuración de build para desarrollo unipersonal a ~8 h/día (`BRS.md` §8.1). La
+ventaja —compartir dominio— solo se materializa con una **tercera superficie**, que hoy no
+existe: Android e iOS son el mismo consumidor. El coste se paga antes del primer incremento
+de valor.
+
+**Reversibilidad declarada:** volver a un único objetivo es un cambio acotado mientras no
+haya segundo consumidor. Se registra en `adr/0001`, no aquí.
+
+**Criterio de reevaluación:** cuando aparezca una tercera superficie, o cuando el coste de
+build se perciba bloqueante frente al avance de las rebanadas.
+
+---
+
+### E-032 — DD-06 revertida: la región se resuelve por ubicación del dispositivo
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Decisión.** La región se resuelve por **ubicación del dispositivo (GPS)**.
+
+**Revierte** D-03 de E-027 (*«desde la cuenta, no desde el GPS»*).
+
+**Consecuencia directa sobre el alcance.** `SyRS.md` §6.1: con ubicación, **SYR-24
+permanece activa y el total sigue siendo 33** — que es el caso corregido en E-029.
+
+**Por qué se revierte.** D-03 se apoyaba en una lectura de pertenencia que tiene un hueco
+sin cubrir: una persona con macetas en **dos** regiones no tiene regla de desempate, y el
+lanzamiento por cluster es precisamente el caso donde eso ocurre. GPS elimina ese caso, no
+lo traslada.
+
+**Alternativas consideradas y descartadas:**
+
+| Opción | Por qué no |
+|---|---|
+| Desde la cuenta (pertenencia) | Es lo que E-027 eligió. Sin regla de desempate para macetas en dos regiones |
+| Selección explícita por la persona | Introduce un paso de selección que tensiona SYR-25 y SYR-26 |
+| Pertenencia con respaldo por GPS | Mantiene dos rutas que hay que probar y mantener |
+
+**Costos aceptados, escritos y no ocultados:**
+
+1. **Diálogo de permiso de ubicación** en el camino de entrada.
+2. **La precisión del GPS pasa a ser dependencia de arranque** bajo **RN-03** (riesgo
+   **R-001**): un dispositivo con GPS degradado no llega al listado.
+3. **Segundo vector de datos personales**, que se suma al ya señalado por **R-008**
+   mientras su valor por defecto siga pendiente (**Q-026**).
+
+**Distinción que el cambio no borra (red de seguridad de E-027):** la ubicación del
+**dispositivo** la obtiene el sistema; la ubicación de la **maceta** (SYR-08) la entrega la
+plataforma. No son el mismo dato, y `specs/obtencion-de-datos` mantiene la separación
+explícitamente. `Q-006` se reabre por la primera mitad y se cierra por la segunda.
+
+**Efecto de tipo, no solo de vista.** GPS crea un **tercer** resultado de consulta posible
+además de «conjunto» y «vacío»: *región no resuelta*. Sin representarlo, se colapsaría en
+«no hay macetas», que es exactamente lo que **SYR-21** prohíbe. De ahí el tipo de tres
+estados de `adr/0005`.
+
+---
+
+### E-033 — DD-07: configuración remota con valor por defecto horneado
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Decisión.** La regla de acceso (SYR-12, SYR-19), la resolución de región y los criterios
+de filtrado se ajustan mediante un **documento de configuración remoto** recuperado en
+ejecución, con **tres claves independientes** y un **valor por defecto seguro horneado en
+el build** como respaldo.
+
+**Por qué el mecanismo no es una decisión de estilo.** De él depende el tratamiento que
+E-026 dio a **R-008**. E-026 desacopló el valor por defecto del sistema al volver la regla
+ajustable (SYR-31). Ese desacoplamiento **solo se sostiene si el mecanismo lo permite**:
+
+| Mecanismo | ¿SYR-31 satisfecho? | Consecuencia para R-008 |
+|---|---|---|
+| **Configuración remota** | **Sí** | Endurecer no requiere release |
+| Constantes de build | Solo literalmente | Exige publicar una versión: es un release de código en todo salvo en el nombre |
+| Archivo local empaquetado | Solo literalmente | Todo cambio vuelve a requerir publicación |
+
+Un valor horneado **no cumple SYR-31 por sí solo**, y confundir «no modificar el código
+fuente» con «no publicar una versión» habría reabierto R-008 sin que nadie lo notara.
+
+**Fallo en cerrado, declarado:** sin conectividad se aplica el valor **más restrictivo**, no
+el más permisivo. Un respaldo permisivo convertiría un fallo de red en apertura de acceso.
+
+**SYR-32 por construcción:** tres claves separadas, nunca un bloque único. Una
+configuración monolítica impediría cumplir el requisito de forma estructural.
+
+**Registrado en:** `adr/0004`.
+
+---
+
+### E-034 — DD-05 con supuesto no respaldado: `SA-04` y por qué la identidad queda `PROPUESTO`
+**Fecha:** 2026-09-29 · **Estatus:** `PROPUESTO`
+
+**Decisión.** La identidad se **delega a la plataforma**: emite un token de acceso de vida
+corta, que el sistema guarda en almacenamiento seguro del dispositivo (Keystore / Keychain).
+El cliente nunca posee credenciales de la plataforma (SYR-18, SYR-20).
+
+**Coincide con E-027 (D-02: *«Delegado a la plataforma»*)**, pero el estatus **no**.
+
+#### El hueco: `SA-04`
+
+`BRS.md` §8.2 define **SA-01** —la capacidad de plataforma existente— como *«telemetría y
+comandos de actuadores»*. **La autenticación no figura en ella.** Sin embargo SYR-01,
+SYR-12, SYR-17 y SYR-19 descansan sobre una capacidad de autenticación. **Ningún documento
+de la cadena la establece.**
+
+**Supuesto nuevo registrado:**
+
+| ID | Supuesto | Si resulta falso |
+|---|---|---|
+| **SA-04** | La plataforma emite sesiones y es la única autoridad sobre identidad y sobre la regla de acceso | **SYR-01, SYR-12, SYR-17 y SYR-19 quedan sin soporte.** No es recuperable desde el cliente: DA-01 impide que el frontend invente identidad |
+
+**Por qué `PROPUESTO` y no `DECIDIDO`.** La regla de §1 es *«nunca se registra una idea como
+si estuviera decidida»*. Aceptar la decisión sería comprometer el proyecto a un supuesto sin
+verificar. Un identificador de dispositivo **no** salvaría la línea base: no produce un
+«usuario del sistema» del que SYR-12 pueda hablar, ni un «propio» del que SYR-13 dependa.
+Sin identidad, cuatro requisitos caen.
+
+**Por qué no se declara bloqueante.** Detener toda la línea base por una incógnita externa
+sería proportionate; las especificaciones pueden escribirse contra el supuesto **con el
+supuesto declarado**. Es la diferencia entre *no poder avanzar* y *no saber si el suelo
+existe*.
+
+**Condición de cierre (`PROPUESTO` → `DECIDIDO`):** confirmar SA-04 contra la plataforma.
+**Acción:** tarea 1.1 de `tasks.md`. **Si se refuta:** ADR sustituyente, no corrección de
+`adr/0002`.
+
+**Nota sobre E-026 que ya no aplica:** el control 6 de §1 (control de suposición) pide
+distinguir *supuesto de negocio* (se pregunta) de *decisión de diseño* (se difiere). SA-04
+es un **supuesto de negocio sobre un sistema externo**: no se difiere porque diferirlo
+significa no decidir nunca, y no se da por hecho porque suponerlo sería afirmar lo no
+observado. Se declara y se verifica.
+
+**Registrado en:** `adr/0002`, estatus `proposed`.
+
+---
+
+### E-035 — `slice-1-listado-regional` superado por `implementar-sistema-desde-sysr`
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Decisión.** El change `openspec/changes/slice-1-listado-regional/` (E-027, E-028) queda
+**superado** y se elimina. Lo sustituye
+`openspec/changes/implementar-sistema-desde-sysr/`.
+
+**Motivo.** Emitieron **el mismo nivel (SRS) sobre los mismos 33 SYR**, con repartos
+distintos: 4 capacidades `spec-driven` frente a 7 `intent-driven`. Ambos pasan
+`validate --strict`, de modo que **OpenSpec no señala el conflicto**: la ambigüedad
+residía únicamente en la disciplina del lector. Un SRS con dos versiones en el mismo
+directorio es el defecto que este change venía a corregir.
+
+**Qué se conserva y qué se pierde.** La única pérdida real es `slice-1` y su historia en
+git. **Se preserva en BITÁCORA.md todo lo que era conocimiento y no artefacto**: el
+razonamiento de D-01 (E-027), el principio *«adaptarse siempre es posible; exigir no»* de
+D-08 (E-028), la tabla de fusiones 29-SWR/33-SYR, y la red de seguridad de la
+no-confusión entre ubicación del teléfono y de la maceta (E-032). Es la razón por la que
+esta bitácora existe y por la que no se borra con el change que la reemplaza.
+
+**Recuperable:** el change está en el commit `1834765`, ya versionado.
+
+**Lo que este change hace mejor, y no es accidental:** el `slice-1` resolvió DD-01, DD-02,
+DD-05 y DD-06 en el `design.md` **de un change**. `intent-driven` exige que esas decisiones
+vivan en ADRs de nivel de repositorio, y obliga a declarar su estatus. El resultado
+visible es que DD-05 aparece como `proposed` por SA-04 —algo que en `spec-driven` habría
+podido quedar como afirmación dentro de un documento que se archiva con el change.
+
+**Nota de trazabilidad:** `slice-1` expresó 29 SWR (no 33) mediante cuatro fusiones
+justificadas. `implementar-sistema-desde-sysr` usa 33 requisitos sobre 7 capacidades
+mediante un reparto **disjunto** que suma exactamente 33. Ambos métodos son defendibles; el
+disjunto se eligió porque hace la cobertura verificable por script sin justificar fusiones.
+
+---
+
+### E-036 — Corrección de `openspec/config.yaml`: reglas vacías
+**Fecha:** 2026-09-29 · **Estatus:** `DECIDIDO`
+
+**Defecto.** Las claves `specs:` y `tasks:` de `openspec/config.yaml` no tenían ningún
+elemento de lista activo; todos estaban comentados. Al parsear, ambas rinden `null` y
+OpenSpec lo rechaza:
+
+```
+Rules for 'specs' must be an array of strings, ignoring this artifact's rules
+Rules for 'tasks' must be an array of strings, ignoring this artifact's rules
+```
+
+**Origen.** Plantilla `intent-driven-dev/intent-driven-template`, commit `5673ba9`.
+
+**Corrección.** Eliminar las dos claves. Es **preservadora de comportamiento**: su efecto
+ya era ignorarlas, y el aviso se debía precisamente a que existían sin contenido.
+
+**Por qué no se rellenan.** `specs` y `tasks` Apuntan a `spec-as-source`, una skill
+distinta de la usada en `proposal` y `design`. Activarla cambia qué se exige al autor de
+esos artefactos, y eso es decisión del propietario, no una reparación de un bug de parseo.
+La dejo planteada, no aplicada.
+
 ### 5.1 Riesgos de proyecto
 
 | ID | Riesgo | Origen | Estado |
@@ -1246,7 +1523,9 @@ Prioridad = bloquea el nivel actual. Se responden de a una.
 | Q-003 | ¿La meta es certificación ISO formal, o disciplina de trazabilidad interna? Cambia el rigor exigido | Transversal | Abierta |
 | Q-004 | ¿La app debe operar con el teléfono bloqueado / en segundo plano? | ARQ | Abierta (reasignada) |
 | Q-005 | ¿Quién emite el push: el backend o el frontend? | SyRS/SRS | Abierta |
-| ~~Q-006~~ | ~~¿Qué representa el GPS de una maceta?~~ | SyRS | **RESPONDIDA en D-03 (E-027).** La ubicación de la maceta es un dato de la plataforma. **El GPS del dispositivo se descarta** para resolver la región, y **SYR-24 queda desactivado** |
+| ~~Q-006~~ | ~~¿Qué representa el GPS de una maceta?~~ | SyRS | **RESPONDIDA → D-03 (E-027).** La ubicación de la **maceta** es un dato de la plataforma. Sigue vigente: `obtencion-de-datos` mantiene la separación entre ubicación del teléfono y de la maceta. **La mitad sobre el GPS del dispositivo se revierte en E-032**: ahora se **usa** para resolver la región, y SYR-24 queda **activa** (total 33) |
+| **Q-030** | **¿La plataforma expone autenticación (SA-04)?** `BRS.md` §8.2 SA-01 solo declara telemetría y actuadores. Sin esta capacidad, **SYR-01, SYR-12, SYR-17 y SYR-19 quedan sin soporte**, y el arreglo es de arquitectura, no de implementación | **SRS — BLOQUEANTE** | **ABIERTA → E-034.** Tarea 1.1 de `tasks.md`. IDs 027/028 no reutilizados: ya estaban eliminadas en E-026 |
+| **Q-031** | **¿Qué interfaz expone la plataforma para sesión y para configuración remota?** Forma del token, mecanismo de renovación, formato del documento de configuración. Bloqueante para DD-05 y DD-07 | SRS | **ABIERTA → E-033, E-034.** Tarea 1.2 |
 | Q-007 | ¿El frontend *crea* el registro de maceta o solo *asocia* una ya registrada? Afecta el modelo de estados | SRS | Abierta |
 | Q-008 | ¿Hay superficie de administración en la app móvil? Nota: es **crítica** si hay moderación de red social | StRS | Abierta |
 | Q-009 | ¿Idioma de la UI: español, inglés, ambos? "Internacional" sugiere multilingüe | SRS | Abierta |

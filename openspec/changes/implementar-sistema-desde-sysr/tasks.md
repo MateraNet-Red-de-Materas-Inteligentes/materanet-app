@@ -10,17 +10,19 @@
 
 ## 1. Dependencias bloqueantes
 
-- [ ] 1.1 **Confirmar SA-04**: verificar si la plataforma expone autenticación que emita
-  token de acceso de vida corta. Es la pregunta bloqueante nº1 del `design.md` y la única
-  cuyo resultado adverso invalida ADR-0002 y deja SYR-01, SYR-12, SYR-17 y SYR-19 sin
-  soporte. **Hecho cuando** la respuesta está registrada por escrito y ADR-0002 pasa a
-  `accepted` o se emite un ADR sustituyente.
+- [ ] 1.1 **Confirmar SA-04** (`Q-030`): verificar si la plataforma expone autenticación
+  que emita token de acceso de vida corta. Es la pregunta bloqueante nº1 del `design.md` y
+  la única cuyo resultado adverso invalida ADR-0002 y deja SYR-01, SYR-12, SYR-17 y SYR-19
+  sin soporte. **La bitácora registra DD-05 como *«delegado a la plataforma»* (E-027), pero
+  eso no confirma que la capacidad exista**: `BRS.md` §8.2 SA-01 sigue sin incluirla.
+  **Hecho cuando** la respuesta está registrada por escrito y ADR-0002 pasa a `accepted` o
+  se emite un ADR sustituyente.
 
-- [ ] 1.2 **Determinar la interfaz de sesión y de configuración remota** que expone la
-  plataforma: puntos de entrada, forma del token, mecanismo de renovación, formato del
-  documento de configuración. Bloqueante para DD-05 y DD-07. **Hecho cuando** existe una
-  descripción utilizable, o se declara que la plataforma aún no la expone y DD-05/DD-07
-  pasan a esperar.
+- [ ] 1.2 **Determinar la interfaz de sesión y de configuración remota** (`Q-031`) que
+  expone la plataforma: puntos de entrada, forma del token, mecanismo de renovación,
+  formato del documento de configuración. Bloqueante para DD-05 y DD-07. **Hecho cuando**
+  existe una descripción utilizable, o se declara que la plataforma aún no la expone y
+  DD-05/DD-07 pasan a esperar.
 
 - [ ] 1.3 **Confirmar el supuesto SA-01** (telemetría y comandos de actuadores), del que
   depende el hecho de que el proyecto tenga objeto. **Hecho cuando** está confirmado o se
@@ -28,18 +30,22 @@
 
 ## 2. Recuperación documental
 
-- [ ] 2.1 **Rastrear `BITÁCORA.md`** en el repositorio de origen, historial o copia de
-  seguridad. Se citan entradas `E-001…E-026`, `Q-021/026/028/029` y `DA-01/DA-02` que las
-  tres especificaciones usan como trazabilidad. **Hecho cuando** el documento está
-  recuperado y las referencias son legibles, o se declara formalmente perdido.
+- [x] 2.1 **`BITÁCORA.md` recuperado** del remoto. Tenía 1324 líneas con `E-001…E-028`,
+  `Q-001…Q-031`, `DA-01/DA-02` y `SA-01`. El repositorio local estaba por detrás: le
+  faltaba el documento y el change `slice-1-listado-regional`. Reconciliado sobre el
+  historial remoto, sin borrados (E-029).
 
-- [ ] 2.2 **Contrastar DA-01 y DA-02** de la bitácora recuperada contra lo asumido en la
-  línea base, en particular si la capacidad de autenticación ya estaba registrada y se
-  perdió con el documento. **Hecho cuando** no hay discrepancias, o están resueltas.
+- [x] 2.2 **DA-01 y DA-02 contrastados.** Sin discrepancias en sí mismos. **Hallazgo
+  colateral:** la bitácora registra DD-02 (Expo/React Native) y DD-06 (región desde la
+  cuenta) resueltas en `slice-1`, lo que **contradice** las decisiones tomadas en este
+  change. Registrado como reversión explícita en E-031 y E-032, con sus alternativas
+  descartadas y sus costos asumidos.
 
-- [ ] 2.3 **Registrar en `BITÁCORA.md` las decisiones de este change** (DD-02, DD-05, DD-06,
-  DD-07 y SA-04), de modo que la cadena documental siga siendo trazable. **Hecho cuando**
-  las cinco aparecen con entrada propia.
+- [x] 2.3 **Decisiones de este change registradas** en `BITÁCORA.md` como E-029…E-036:
+  corrección de E-029, migración a `intent-driven` (E-030), DD-02 (E-031), DD-06 (E-032),
+  DD-07 (E-033), DD-05 y SA-04 (E-034), supersesión de `slice-1` (E-035) y corrección de
+  `config.yaml` (E-036). Actualizados §0 Identificación, §5 (`Q-006` revertida, `Q-030` y
+  `Q-031` nuevas) y la fecha de cabecera.
 
 ## 3. Base del proyecto
 
