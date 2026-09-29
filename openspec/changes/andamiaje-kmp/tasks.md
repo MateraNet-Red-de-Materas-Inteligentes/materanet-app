@@ -3,7 +3,7 @@
 > **Alcance de este change.** Construye el proyecto Kotlin Multiplatform con su frontera
 > hacia la plataforma y el entorno que permite verificarla. **No implementa ninguna de las
 > 33 SYR**: `commonMain` lleva el vocabulario que el contrato necesita para hablarse y
-> ningún comportamiento propio (ADR-0008 es el ADR del andamiaje; D-05 en `design.md`).
+> ningún comportamiento propio (D-05 en `design.md`).
 > La primera rebanada, que es la que le da uso, se propone aparte como
 > `rebanada-1-listado-regional`.
 >
@@ -11,17 +11,27 @@
 > es puro documento, aquí se compila y se prueba. Es lo que lo distingue y lo que obliga a
 > que su puerta sea ejecutable y no una promesa.
 >
+> **Precondición para aplicar este change:** los tres ADR nuevos —`0006`, `0007`, `0008`—
+> deben estar en `accepted`. Hoy están en `proposed` y en revisión. Las tareas de abajo se
+> apoyan en ellos, así que **`apply` no debe empezar antes de que los tres se aprueben**: si
+> alguno cambia durante la revisión, estas tareas cambian con él.
+>
 > **Tarea previa a todo lo demás:** el SDK de Android. Sin él, la configuración de Kotlin
-> Multiplatform es todo-o-nada y **falla también el objetivo de JVM** (ADR-0008).
+> Multiplatform es todo-o-nada y **falla también el objetivo de JVM** (`adr/0008`).
 
 ## 1. Entorno de compilación
 
-- [ ] 1.1 **Instalar el SDK de Android** y dejarlo apuntando desde la configuración del
+- [ ] 1.1 **Aprobar los tres ADR nuevos**, pasándolos de `proposed` a `accepted` una vez
+  revisados. Precondición de todo lo demás: las tareas 3, 4 y 5 se apoyan en ellos. **Hecho
+  cuando** `adr/0006`, `adr/0007` y `adr/0008` tienen estatus `accepted`, o bien se ha
+  emitido un ADR que los superseda y las tareas se han revisado en consecuencia.
+
+- [ ] 1.2 **Instalar el SDK de Android** y dejarlo apuntando desde la configuración del
   proyecto. Motivo: en KMP la configuración es todo-o-nada, y declarar `androidTarget()`
   sin SDK impide compilar **también** el objetivo de JVM, que es el único verificable aquí.
   **Hecho cuando** la configuración de Gradle resuelve `androidTarget()` sin error y
   `ANDROID_HOME` —o `sdk.dir`— está declarado en el repositorio, no solo en la máquina.
-- [ ] 1.2 **Confirmar la toolchain base**: JDK 21 y wrapper de Gradle descargando la versión
+- [ ] 1.3 **Confirmar la toolchain base**: JDK 21 y wrapper de Gradle descargando la versión
   fijada. **Hecho cuando** `./gradlew --version` responde sin intervención manual.
 
 ## 2. Esqueleto del proyecto

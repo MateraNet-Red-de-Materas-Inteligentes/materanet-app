@@ -38,16 +38,39 @@ Contexto que constrain este diseño, ninguno de ellos modificado:
 
 ## ADR nuevos creados
 
-- `adr/0006-contrato-de-plataforma-declarado-por-el-cliente.md` — *accepted*. El contrato con
+Los tres quedan en estatus **`proposed`**, no `accepted`. Ninguno está aprobado todavía: se
+somete a revisión antes de que su contenido se vuelva inmutable. Ver *Estado de la revisión*.
+
+- `adr/0006-contrato-de-plataforma-declarado-por-el-cliente.md` — *proposed*. El contrato con
   la plataforma lo declara el cliente, con cinco capacidades, y **no se le exige ninguna**.
   Resuelve `DD-01` como declaración propia y no cierra `Q-025`.
-- `adr/0007-verificacion-por-punto-de-composicion.md` — *accepted*. Los dobles de prueba se
+- `adr/0007-verificacion-por-punto-de-composicion.md` — *proposed*. Los dobles de prueba se
   separan de la distribución **por composición, no por tipo de compilación**, de modo que la
   garantía la impone el compilador.
-- `adr/0008-objetivo-jvm-como-instrumento-de-verificacion.md` — *accepted*. Se declara un
+- `adr/0008-objetivo-jvm-como-instrumento-de-verificacion.md` — *proposed*. Se declara un
   objetivo de JVM **como instrumento de verificación y no de distribución**, junto con
-  Android e iOS. Reconcile con la observación de ADR-0001 sobre objetivos que no se
+  Android e iOS. Reconcilia con la observación de ADR-0001 sobre objetivos que no se
   justifican entre sí.
+
+## Estado de la revisión
+
+**Los tres ADR nuevos están en revisión.** Se crean en `proposed` y pasan a `accepted` solo
+cuando se aprueben.
+
+El motivo es la inmutabilidad: **un ADR aceptado no se edita jamás** —ni su estatus, ni su
+cuerpo, ni su fecha. Para cambiar una decisión aceptada hay que emitir otro que la superseda.
+Escribir estos tres directamente en `accepted` habría hecho irreversible, antes de que nadie
+los leyera, un texto cuya revisión es justamente lo que este change necesita.
+
+**Consecuencia sobre los cambios ya redactados.** `design.md` y `tasks.md` se apoyan en
+ADR-0006, ADR-0007 y ADR-0008 como si fueran compromisos firmes. Mientras estén en
+`proposed`, esas referencias son **a decisiones propuestas**: si alguno cambia al revisarse,
+`design.md` y `tasks.md` deben revisarse con él. El change no debe pasar a `apply` hasta que
+los tres estén aceptados, porque `apply` ejecutaría tareas apoyadas en decisiones que
+todavía pueden cambiar.
+
+Los cuatro ADR anteriores (`0001`, `0003`, `0004`, `0005`) permanecen `accepted` e
+intocables. `0002` sigue `proposed` por `SA-04`, que es una razón distinta y ya conocida.
 
 ## Decisiones descartadas por no alcanzar el umbral
 

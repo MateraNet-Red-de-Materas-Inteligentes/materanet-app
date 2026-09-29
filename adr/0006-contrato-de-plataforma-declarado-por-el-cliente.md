@@ -1,5 +1,5 @@
 ---
-status: "accepted"
+status: "proposed"
 date: 2026-09-29
 decision-makers: "Paulo (propietario del producto)"
 consulted: "—"
