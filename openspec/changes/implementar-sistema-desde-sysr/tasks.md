@@ -6,7 +6,9 @@
 > (`SyRS.md` §6.2). Las tareas de abajo cierran la línea base, eliminan dependencias
 > bloqueantes y dejan declarada la secuencia de rebanadas.
 >
-> Ninguna tarea de este documento escribe código de producción.
+> **Ninguna tarea de este documento escribe código de producción.** El andamiaje
+> Kotlin Multiplatform y la suite de tests de `commonMain` quedan **fuera** de este
+> change por decisión explícita —ver §3-bis— y son infraestructura de la primera rebanada.
 
 ## 1. Dependencias bloqueantes
 
@@ -49,18 +51,29 @@
 
 ## 3. Base del proyecto
 
-- [ ] 3.1 **Inicializar el control de versiones** en el repositorio. Hoy no es un repositorio
-  git, de modo que no hay historial ni trazabilidad de decisiones. **Hecho cuando** `git
-  status` funciona y `AGENTS.md` está versionado.
+- [x] 3.1 **Control de versiones inicializado** y conectado al remoto
+  (`MateraNet-Red-de-Materas-Inteligentes/materanet-app`), reconciliado sobre el historial
+  remoto **sin borrados**. Cierra la tarea 3.1 original, que quedó obsoleta al escribirse:
+  el repositorio ya es git.
 
-- [ ] 3.2 **Crear el esqueleto del proyecto Kotlin Multiplatform** conforme a ADR-0001, con
-  el dominio en `commonMain` y la frontera `expect`/`actual` limitada a almacenamiento
-  seguro y ubicación. **Hecho cuando** compila para Android e iOS con la frontera en esos
-  dos puntos y en ningún otro.
+## 3-bis. Andamiaje Kotlin Multiplatform — no pertenece a este change
 
-- [ ] 3.3 **Establecer la disciplina de tests del dominio en `commonMain`** exigida por
-  ADR-0001, ejecutables sin referencia a ninguna plataforma. **Hecho cuando** la suite pasa
-  sin emulador ni dispositivo.
+> **Por qué aquí y no como tareas 3.2/3.3.** El borrador original de este `tasks.md` las
+> contenía, y era contradictorio: el encabezado de alcance afirmaba que ninguna tarea
+> escribía código de producción, mientras 3.2 exigía un esqueleto que **compila** para
+> Android e iOS. Una de las dos era falsa. Se eligió la que mantiene el change
+> archivable.
+>
+> Este change es **puro documento**: establece el SRS. El esqueleto y la disciplina de
+> tests de `commonMain` son **infraestructura de la primera rebanada**, y por la misma
+> regla que gobierna las rebanadas (tarea 5.5: cada una es un change de OpenSpec propio)
+> deben vivir en su propio change.
+>
+> **Elementos que deben pasar a ese change, sin pérdida:**
+> - Esqueleto KMP conforme a `adr/0001`, con `expect`/`actual` **limitada a dos puntos**:
+>   almacenamiento seguro y ubicación.
+> - Suite de tests del dominio en `commonMain`, ejecutable **sin emulador ni dispositivo**
+>   — es el criterio de confirmación que fija `adr/0001`.
 
 ## 4. Declaraciones que DD-08 exige
 
