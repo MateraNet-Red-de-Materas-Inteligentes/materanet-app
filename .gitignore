@@ -1,4 +1,6 @@
-.opencode/
+# .opencode/ NO se ignora: el remoto ya lo trackea (12 archivos).
+# La regla original '.opencode/' contradecía ese hecho y excluía del commit
+# los archivos nuevos .opencode/agent/ y .opencode/skills/adversarial-authoring/.
 # Dependencias
 node_modules/
 .pnp
